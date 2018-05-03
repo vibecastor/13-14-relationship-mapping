@@ -2,7 +2,7 @@
 
 import mongoose from 'mongoose'; 
 
-const CoffeeSchema = mongoose.Schema({
+const Coffee = mongoose.Schema({
   brand: {
     type: String,
     required: true,

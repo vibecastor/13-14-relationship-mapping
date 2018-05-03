@@ -3,7 +3,7 @@
 import { Router } from 'express';
 import bodyParser from 'body-parser';
 import HttpErrors from 'http-errors';
-import CoffeeSchema from '../model/coffee';
+import Coffee from '../model/coffee';
 import logger from '../lib/logger';
 
 const jsonParser = bodyParser.json();
@@ -23,7 +23,7 @@ coffeeRouter.post('/api/coffee', jsonParser, (request, response, next) => {
     logger.log(logger.ERROR, 'ROUTER: Responding with a 400 error code, no coffee roast');
     return next(new HttpErrors(400, 'ROUTER: roast is required'));
   }
-  return new CoffeeSchema(request.body).save()
+  return new Coffee(request.body).save()
     .then((coffee) => {
       logger.log(logger.INFO, 'ROUTER: POST - responding with a 200 status code');
       return response.json(coffee);
@@ -31,15 +31,19 @@ coffeeRouter.post('/api/coffee', jsonParser, (request, response, next) => {
     .catch(next);
 });
 
-coffeeRouter.put('api/coffee/:id', jsonParser, (request, response, next) => { // from judy's lab 13 demo
+coffeeRouter.put('/api/coffee/:id', jsonParser, (request, response, next) => { // from judy's lab 13 demo
+  // console.log('inside the put route');
   const options = { runValidators: true, new: true }; // makes sure we honor the schema properties.
-  return CoffeeSchema.findByIdAndUpdate(request.params.id, request.body, options)
+  return Coffee.findByIdAndUpdate(request.params.id, request.body, options)
     .then((updatedCoffee) => {
       if (!updatedCoffee) {
         logger.log(logger.ERROR, 'ROUTER: responding with a 404 status code - !updatedCoffee');
-        return next(new HttpErrors(404, 'coffee not found'));
+        return next(new HttpErrors(400, 'coffee id not found'));
       }
-
+      if (!updatedCoffee.id) {
+        logger.log(logger.ERROR, 'ROUTER: responding with a 404 status code - !updatedCoffee');
+        return next(new HttpErrors(404, 'coffee id not found'));
+      }
       logger.log(logger.INFO, 'ROUTER:  PUT - responding with 200 status code');
       return response.json(updatedCoffee);
     })
@@ -47,13 +51,14 @@ coffeeRouter.put('api/coffee/:id', jsonParser, (request, response, next) => { //
 });
 
 coffeeRouter.get('/api/coffee/:id', (request, response, next) => {
-  return CoffeeSchema.findById(request.params.id)
+  return Coffee.findById(request.params.id)
     .then((coffee) => {
       if (!coffee) {
         logger.log(logger.INFO, 'ROUTER: GET - responding with a 404 status code = (!coffee');
         return next(new HttpErrors(404, 'ROUTER: coffee not found'));
       }
       logger.log(logger.INFO, 'ROUTER: GET - responding with a 200 status code');
+      logger.log(logger.INFO, `ROUTER: GET - ${JSON.stringify(coffee)}`);
       return response.json(coffee);
     })
     .catch(next);
@@ -70,19 +75,6 @@ coffeeRouter.delete('/api/coffee/:id', (request, response, next) => {
       return response.sendStatus(204, 'ROUTER: Deleted a coffee');
     })
     .catch(next);
-});
-
-coffeeRouter.get('api/coffee/:id', (request, response, next) => { // from judy's lab 13 demo.
-  return Coffee.findById(request.params.id)
-    .then((coffee) => {
-      if (!coffee) {
-        logger.log(logger.ERROR, 'ROUTER: response with a 404 status code !coffee');
-        return next(new HttpErrors(404, 'coffer not found'));
-      }
-      //  logger
-      // logger
-      return response.json(coffee);
-    });
 });
 
 export default coffeeRouter;

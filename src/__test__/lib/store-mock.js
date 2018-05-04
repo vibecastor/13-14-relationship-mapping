@@ -1,7 +1,7 @@
 'use strict';
 
 import faker from 'faker';
-import store from '../model/store-model';
+import Store from '../../model/store-model';
 import coffeeMock from './coffee-mock';
 
 const createStoreMock = () => {
@@ -24,8 +24,8 @@ const createStoreMock = () => {
 };
 
 const removeStoreMock = () => Promise.all([
-    Store.remove({}),
-    coffeeMock.removeCoffeeMock(),
+  Store.remove({}),
+  coffeeMock.removeStoreMock(),
 ]);
 
 export { createStoreMock, removeStoreMock };

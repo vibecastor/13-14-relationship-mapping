@@ -3,7 +3,7 @@
 import { Router } from 'express';
 import bodyParser from 'body-parser';
 import HttpErrors from 'http-errors';
-import Coffee from '../model/coffee';
+import Coffee from '../model/coffee-model';
 import logger from '../lib/logger';
 
 const jsonParser = bodyParser.json();
@@ -31,7 +31,7 @@ coffeeRouter.post('/api/coffee', jsonParser, (request, response, next) => {
     .catch(next);
 });
 
-coffeeRouter.put('/api/coffee/:id', jsonParser, (request, response, next) => { // from judy's lab 13 demo
+coffeeRouter.put('/api/coffee/:id', jsonParser, (request, response, next) => {
   // console.log('inside the put route');
   const options = { runValidators: true, new: true }; // makes sure we honor the schema properties.
   return Coffee.findByIdAndUpdate(request.params.id, request.body, options)

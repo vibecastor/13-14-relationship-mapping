@@ -4,8 +4,9 @@
 import faker from 'faker';
 import superagent from 'superagent';
 // internal modules
-import Coffee from '../model/coffee';
+import Coffee from '../model/coffee-model';
 import { startServer, stopServer } from '../lib/server';
+import { createCoffeeMock removeCoffeeMock } from './lib/coffee-mock';
 
 const apiUrl = `http://localhost:${process.env.PORT}/api/coffee`;
 

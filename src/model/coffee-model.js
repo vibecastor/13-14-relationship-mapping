@@ -9,7 +9,7 @@ const Coffee = mongoose.Schema({
   },
   origin: {
     type: String,
-    required: true, 
+    required: true,
   },
   roast: {
     type: String,
@@ -21,9 +21,11 @@ const Coffee = mongoose.Schema({
   },
   stores: [
     {
-      type: mongoose.Schema.Types.ObjectId, ref: 'card', 
+      type: mongoose.Schema.Types.ObjectId, ref: 'stores',
     },
   ],
+}, {
+  usePushEach: true,
 });
 
 // Mongoose wants to create a model out of a schema

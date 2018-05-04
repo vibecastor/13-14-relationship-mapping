@@ -28,7 +28,10 @@ storeRouter.put('/api/store/:id', jsonParser, (request, response, next) => {
       logger.log(logger.INFO, 'STORE-ROUTER - PUT - responding with a 404 status');
       return next(new HttpError(404, 'store not found'));
     }
-    logger.log(logger.INFO, 'STORE-ROUTER - PUT = responsd with a 200 status');
+    logger.log(logger.INFO, 'STORE-ROUTER - PUT = responding with a 200 status');
     return response.json(updatedStore);
-  });
+  })
+    .catch(next);
 });
+
+export default storeRouter;

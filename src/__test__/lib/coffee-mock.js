@@ -4,7 +4,7 @@ import faker from 'faker';
 import coffee from '../../model/coffee-model';
 
 const createCoffeeMock = () => {
-  return new Coffee({
+  return new coffee({
     brand: faker.lorem.words(10),
     origin: faker.lorem.words(25),
     roast: faker.lorem.words(10),
@@ -14,4 +14,4 @@ const createCoffeeMock = () => {
 
 const removeCoffeeMock = () => Coffee.remove({});
 
-default 
+export { createCoffeeMock, removeCoffeeMock };

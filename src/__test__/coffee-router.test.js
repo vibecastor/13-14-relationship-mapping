@@ -6,20 +6,12 @@ import superagent from 'superagent';
 // internal modules
 import Coffee from '../model/coffee-model';
 import { startServer, stopServer } from '../lib/server';
-import { createCoffeeMock removeCoffeeMock } from './lib/coffee-mock';
+import { createCoffeeMock, removeCoffeeMock } from './lib/coffee-mock';
 
 const apiUrl = `http://localhost:${process.env.PORT}/api/coffee`;
 
 // const coffeeObj = {};
 
-const createCoffeeMock = () => {
-  return new Coffee({
-    brand: faker.lorem.words(10),
-    origin: faker.lorem.words(25),
-    roast: faker.lorem.words(10),
-    roasted: faker.date.recent(),
-  }).save();
-};
 
 const createBrokenCoffeeMock = () => {
   return new Coffee({
@@ -57,7 +49,7 @@ describe('/api/coffee', () => {
         });
     });
 
-    test('409 due to duplicate title', () => {
+    test('409 due to duplicate brand', () => {
       return createCoffeeMock()
         .then((coffee) => {
           const mockCoffee = {
@@ -99,14 +91,14 @@ describe('/api/coffee', () => {
       let coffeeToUpdate = null;
       return createCoffeeMock()
         .then((coffee) => {
-          console.log('coffee', coffee);
+          // console.log('coffee', coffee);
           coffeeToUpdate = coffee;
           return superagent.put(`${apiUrl}/${coffee._id}`)
             .send({ brand: 'Vivace' })
             .send({ origin: 'Columbia' }); 
         })
         .then((response) => {
-          console.log(response); 
+          // console.log(response);
           expect(response.status).toEqual(200);
           expect(response.body.brand).toEqual('Vivace');
           expect(response.body.origin).toEqual('Columbia');

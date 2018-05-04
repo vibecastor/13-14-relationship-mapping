@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import HttpError from 'http-errors';
 import Coffee from './coffee-model';
 
-const Store = mongoose.Schema({
+const store = mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -49,7 +49,7 @@ const storePostHook = (document, done) => {
     .catch(done);
 };
 
-storeSchema.pre('save', storePreHook);
-storeSchema.post('remove', storePostHook);
+store.pre('save', storePreHook);
+store.post('remove', storePostHook);
 
-export default mongoose.model('store', Store);
+export default mongoose.model('store', store);

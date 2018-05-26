@@ -43,10 +43,9 @@ const stopServer = () => {
         logger.log(logger.INFO, 'SERVER:  Server is off');
       });
     })
-      .catch((error) => {
-          logger.log(logger.ERROR, )
-      })
+    .catch((error) => {
+      logger.log(logger.ERROR, `SERVER: something wrong, server won't turn off ${JSON.stringify(error)} `);
+    });
 };
 
 export { startServer, stopServer };
-

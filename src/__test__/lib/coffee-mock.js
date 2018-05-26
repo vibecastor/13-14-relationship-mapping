@@ -1,10 +1,10 @@
 'use strict';
 
 import faker from 'faker';
-import coffee from '../../model/coffee-model';
+import Coffee from '../../model/coffee-model';
 
 const createCoffeeMock = () => {
-  return new coffee({
+  return new Coffee({
     brand: faker.lorem.words(10),
     origin: faker.lorem.words(25),
     roast: faker.lorem.words(10),
@@ -15,3 +15,4 @@ const createCoffeeMock = () => {
 const removeCoffeeMock = () => Coffee.remove({});
 
 export { createCoffeeMock, removeCoffeeMock };
+

@@ -6,7 +6,7 @@ import superagent from 'superagent';
 // internal modules
 import { startServer, stopServer } from '../lib/server';
 import { createStoreMock, removeStoreMock } from './lib/store-mock';
-import { createCoffeeMock, removeCoffeeMock } from './lib/coffee-mock';
+import { createCoffeeMock } from './lib/coffee-mock';
 
 const apiUrl = `http://localhost:${process.env.PORT}/api/stores`;
 
@@ -18,17 +18,18 @@ describe('/api/stores', () => {
   describe('POST /api/stores', () => {
     test('STORE-ROUTER: 200 status code in creation', () => {
       return createCoffeeMock()
-        .then((coffeeMock) => {});
-      const storeToPost = {
-        name: faker.lorem.words(12),
-        location: faker.lorem.words(15),
-        coffee: coffeeMock._id,
-      };
+        .then((coffeeMock) => {
+          const storeToPost = {
+            name: faker.lorem.words(12),
+            location: faker.lorem.words(15),
+            coffee: coffeeMock._id,
+          };
 
-      return superagent.post(apiUrl)
-        .send(storeToPost)
-        .then((response) => {
-          expect(response.status).toEqual(200);
+          return superagent.post(apiUrl)
+            .send(storeToPost)
+            .then((response) => {
+              expect(response.status).toEqual(200);
+            });
         });
     });
   });

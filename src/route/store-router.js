@@ -23,14 +23,14 @@ storeRouter.put('/api/store/:id', jsonParser, (request, response, next) => {
   const options = { runValidators: true, new: true };
 
   return Store.findByIdAndUpdate(request.params.id, request.body, options)
-  , then((updatedStore) => {
-    if (!updatedStore) {
-      logger.log(logger.INFO, 'STORE-ROUTER - PUT - responding with a 404 status');
-      return next(new HttpError(404, 'store not found'));
-    }
-    logger.log(logger.INFO, 'STORE-ROUTER - PUT = responding with a 200 status');
-    return response.json(updatedStore);
-  })
+    .then((updatedStore) => {
+      if (!updatedStore) {
+        logger.log(logger.INFO, 'STORE-ROUTER - PUT - responding with a 404 status');
+        return next(new HttpError(404, 'store not found'));
+      }
+      logger.log(logger.INFO, 'STORE-ROUTER - PUT = responding with a 200 status');
+      return response.json(updatedStore);
+    })
     .catch(next);
 });
 

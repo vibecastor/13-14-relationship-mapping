@@ -2,7 +2,7 @@
 
 import faker from 'faker';
 import Store from '../../model/store-model';
-import coffeeMock from './coffee-mock';
+import * as coffeeMock from './coffee-mock';
 
 const createStoreMock = () => {
   const resultMock = {};
@@ -25,8 +25,7 @@ const createStoreMock = () => {
 
 const removeStoreMock = () => Promise.all([
   Store.remove({}),
-  coffeeMock.removeStoreMock(),
+  coffeeMock.removeCoffeeMock(),
 ]);
 
 export { createStoreMock, removeStoreMock };
-

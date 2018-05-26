@@ -49,25 +49,28 @@ describe('/api/coffee', () => {
         });
     });
 
-    test('409 due to duplicate brand', () => {
+    test('COFFEE TEST - 409 due to duplicate brand', () => {
       return createCoffeeMock()
         .then((coffee) => {
+          console.log(coffee, 'coffee inside 409 test');
           const mockCoffee = {
             brand: coffee.brand,
             origin: coffee.origin,
             roast: coffee.roast,
             roasted: coffee.roasted,
           };
+          console.log(mockCoffee, 'mockCoffee in 409 test');
           return superagent.post(apiUrl)
             .send(mockCoffee);
         })
         .then(Promise.reject)
         .catch((error) => {
+          console.log(error, 'inside 409 error expect statement');
           expect(error.status).toEqual(409);
         });
     });
 
-    test('400 - no brand', () => {
+    test('COFFEE TEST - 400 - no brand', () => {
       return superagent.post(apiUrl)
         .send({})
         .then(Promise.reject)
@@ -76,7 +79,7 @@ describe('/api/coffee', () => {
         });
     });
 
-    test('400 due to bad json', () => {
+    test('COFFEE TEST - 400 due to bad json', () => {
       return superagent.post(apiUrl)
         .send('{')
         .then(Promise.reject)
@@ -86,7 +89,7 @@ describe('/api/coffee', () => {
     });
   });
   
-  describe('PUT api/coffee', () => {
+  describe('COFFEE TEST - PUT api/coffee', () => {
     test('200 for successful PUT', () => {
       let coffeeToUpdate = null;
       return createCoffeeMock()
@@ -104,14 +107,14 @@ describe('/api/coffee', () => {
           expect(response.body.origin).toEqual('Columbia');
         }); 
     });
-    test('404 - it should respond with 404 if there is no coffee to be found', () => {
+    test('COFFEE TEST - 404 - it should respond with 404 if there is no coffee to be found', () => {
       return superagent.get(`${apiUrl}/`)
         .then(Promise.reject)
         .catch((response) => {
           expect(response.status).toEqual(404);
         });
     }); 
-    test('400 - it should respond with 404 if there is no coffee to be found', () => {
+    test('COFFEE TEST - 400 - it should respond with 404 if there is no coffee to be found', () => {
       return superagent.get(`${apiUrl}/`)
         .then(Promise.reject)
         .catch((response) => {
@@ -121,7 +124,7 @@ describe('/api/coffee', () => {
   });
 
   describe('GET /api/coffee', () => {
-    test('200 -it should respond with 200 if there are no errors', () => {
+    test('COFFEE TEST - 200 -it should respond with 200 if there are no errors', () => {
       let coffeeToTest = null;
       return createCoffeeMock()
         .then((coffee) => {
@@ -135,7 +138,7 @@ describe('/api/coffee', () => {
           expect(response.body.roast).toEqual(coffeeToTest.roast);
         });
     });
-    test('404 - it should respond with 404 if there is no coffee to be found', () => {
+    test('COFFEE TEST - 404 - it should respond with 404 if there is no coffee to be found', () => {
       return superagent.get(`${apiUrl}/`)
         .then(Promise.reject)
         .catch((response) => {
@@ -145,7 +148,7 @@ describe('/api/coffee', () => {
   });
 
   describe('DELETE /api/coffee', () => {
-    test('204 - it should respond with a 204 if the resource is deleted', () => {
+    test('COFFEE TEST - 204 - it should respond with a 204 if the resource is deleted', () => {
       return createCoffeeMock()
         .then((coffee) => {
           return superagent.delete(`${apiUrl}/${coffee._id}`);
@@ -154,7 +157,7 @@ describe('/api/coffee', () => {
           expect(response.status).toEqual(204);
         });
     });
-    test('404 - it should respond with a 404 if no resource found to delete', () => {
+    test('COFFEE TEST - 404 - it should respond with a 404 if no resource found to delete', () => {
       return superagent.get(`${apiUrl}/`)
         .then(Promise.reject)
         .catch((response) => {

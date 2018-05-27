@@ -2,14 +2,14 @@
 
 import mongoose from 'mongoose'; 
 
-const Coffee = mongoose.Schema({
+const coffeeSchema = mongoose.Schema({
   brand: {
     type: String,
     required: true,
   },
   origin: {
     type: String,
-    required: true, 
+    required: true,
   },
   roast: {
     type: String,
@@ -21,10 +21,12 @@ const Coffee = mongoose.Schema({
   },
   stores: [
     {
-      type: mongoose.Schema.Types.ObjectId, ref: 'card', 
+      type: mongoose.Schema.Types.ObjectId, ref: 'store',
     },
   ],
+}, { // this object tells mongoose how to save to child properties in the array...
+  usePushEach: true,
 });
 
 // Mongoose wants to create a model out of a schema
-export default mongoose.model('coffee', Coffee);
+export default mongoose.model('coffee', coffeeSchema);

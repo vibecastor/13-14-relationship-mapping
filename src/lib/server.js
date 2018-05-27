@@ -3,7 +3,8 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import logger from '../lib/logger';
-import coffeeRouter from '../route/coffee-route'; 
+import coffeeRouter from '../route/coffee-route';
+import storeRouter from '../route/store-router';
 import loggerMiddleware from '../lib/logger-middleware';
 import errorMiddleware from '../lib/error-middleware';
 
@@ -13,6 +14,7 @@ let server = null;
 app.use(loggerMiddleware); // Mike: you removed the logger.log's from the routes
 // (2) then this one...
 app.use(coffeeRouter);
+app.use(storeRouter);
 
 app.all('*', (request, response) => {
   logger.log(logger.INFO, 'SERVER: Returning a 404 from the catch-all/default route');
@@ -40,8 +42,10 @@ const stopServer = () => {
       server.close(() => {
         logger.log(logger.INFO, 'SERVER:  Server is off');
       });
+    })
+    .catch((error) => {
+      logger.log(logger.ERROR, `SERVER: something wrong, server won't turn off ${JSON.stringify(error)} `);
     });
 };
 
 export { startServer, stopServer };
-

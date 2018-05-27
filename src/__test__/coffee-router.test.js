@@ -4,28 +4,15 @@
 import faker from 'faker';
 import superagent from 'superagent';
 // internal modules
-import Coffee from '../model/coffee-model';
 import { startServer, stopServer } from '../lib/server';
 import { createCoffeeMock, removeCoffeeMock } from './lib/coffee-mock';
 
 const apiUrl = `http://localhost:${process.env.PORT}/api/coffee`;
 
-// const coffeeObj = {};
-
-
-const createBrokenCoffeeMock = () => {
-  return new Coffee({
-    brand: faker.lorem.words(),
-    origin: faker.lorem.words(),
-    roast: faker.lorem.words(),
-    roasted: faker.date.recent(),
-  }).save();
-};
-
 describe('/api/coffee', () => {
   beforeAll(startServer);
   afterAll(stopServer);
-  afterEach(() => Coffee.remove({}));
+  afterEach(removeCoffeeMock);
 
   describe('POST api/coffee', () => {
     test('POST - It should respond with a 200 status if no errors', () => {
@@ -33,18 +20,14 @@ describe('/api/coffee', () => {
         brand: faker.lorem.words(10),
         origin: faker.lorem.words(25),
         roast: faker.lorem.words(10),
-        // roasted: faker.date.recent(),
       };
       return superagent.post(apiUrl)
         .send(coffeeToPost)
         .then((response) => {
           expect(response.status).toEqual(200);
-          // testing for specific values
           expect(response.body.brand).toEqual(coffeeToPost.brand);
           expect(response.body.origin).toEqual(coffeeToPost.origin);
           expect(response.body.roast).toEqual(coffeeToPost.roast);
-          // expect(response.body.roasted.toString()).toEqual(coffeeToPost.roasted.toString());
-          // are properties present?
           expect(response.body._id).toBeTruthy();
         });
     });
@@ -52,20 +35,20 @@ describe('/api/coffee', () => {
     test('COFFEE TEST - 409 due to duplicate brand', () => {
       return createCoffeeMock()
         .then((coffee) => {
-          console.log(coffee, 'coffee inside 409 test');
+          // console.log(coffee, 'coffee inside 409 test');
           const mockCoffee = {
             brand: coffee.brand,
             origin: coffee.origin,
             roast: coffee.roast,
             roasted: coffee.roasted,
           };
-          console.log(mockCoffee, 'mockCoffee in 409 test');
+          // console.log(mockCoffee, 'mockCoffee in 409 test');
           return superagent.post(apiUrl)
             .send(mockCoffee);
         })
         .then(Promise.reject)
         .catch((error) => {
-          console.log(error, 'inside 409 error expect statement');
+          // console.log(error, 'inside 409 error expect statement');
           expect(error.status).toEqual(409);
         });
     });

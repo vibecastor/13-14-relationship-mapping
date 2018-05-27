@@ -21,10 +21,10 @@ const coffeeSchema = mongoose.Schema({
   },
   stores: [
     {
-      type: mongoose.Schema.Types.ObjectId, ref: 'stores',
+      type: mongoose.Schema.Types.ObjectId, ref: 'store',
     },
   ],
-}, {
+}, { // this object tells mongoose how to save to child properties in the array...
   usePushEach: true,
 });
 

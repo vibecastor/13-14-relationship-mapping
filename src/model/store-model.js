@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import HttpError from 'http-errors';
 import Coffee from './coffee-model';
 
-const store = mongoose.Schema({
+const storeSchema = mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -17,12 +17,16 @@ const store = mongoose.Schema({
   hours: {
     type: String,
   },
-  directions: {
-    type: String,
+  // Mike:  This refers to the parent relationship - coffee.
+  coffee: {
+    type: mongoose.Schema.Types.ObjectId, // this is _id
+    required: true,
+    ref: 'coffee', // string as exported from parent model.
   },
 });
 
-function storePreHook(done) {
+// this has to be declarative because "this" is document which return in the post-hook below...
+function storePreHook(done) { // done is using (error, data)
   return Coffee.findById(this.coffee)
     .then((coffeeFound) => {
       if (!coffeeFound) {
@@ -31,8 +35,8 @@ function storePreHook(done) {
       coffeeFound.stores.push(this._id);
       return coffeeFound.save();
     })
-    .then(() => done())
-    .catch(done);
+    .then(() => done()) //  calling done without arguments.  This means success.
+    .catch(done); // done with arguments means we get an error (error, data)...
 }
 
 const storePostHook = (document, done) => {
@@ -49,7 +53,7 @@ const storePostHook = (document, done) => {
     .catch(done);
 };
 
-store.pre('save', storePreHook);
-store.post('remove', storePostHook);
+storeSchema.pre('save', storePreHook);
+storeSchema.post('remove', storePostHook);
 
-export default mongoose.model('store', store);
+export default mongoose.model('store', storeSchema);

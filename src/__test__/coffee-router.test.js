@@ -35,7 +35,7 @@ describe('/api/coffee', () => {
     test('COFFEE TEST - 409 due to duplicate brand', () => {
       return createCoffeeMock()
         .then((coffee) => {
-          // console.log(coffee, 'coffee inside 409 test');
+          // console.log(coffee, 'coffee inside 409 test')
           const mockCoffee = {
             brand: coffee.brand,
             origin: coffee.origin,
@@ -44,12 +44,11 @@ describe('/api/coffee', () => {
           };
           // console.log(mockCoffee, 'mockCoffee in 409 test');
           return superagent.post(apiUrl)
-            .send(mockCoffee);
-        })
-        .then(Promise.reject)
-        .catch((error) => {
-          // console.log(error, 'inside 409 error expect statement');
-          expect(error.status).toEqual(409);
+            .send(mockCoffee)
+            .catch((error) => {
+            // console.log(error, 'inside 409 error expect statement');
+              expect(error.status).toEqual(409);
+            });
         });
     });
 

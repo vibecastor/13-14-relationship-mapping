@@ -23,7 +23,7 @@ describe('/api/stores', () => {
             name: faker.lorem.words(2),
             location: faker.lorem.words(5),
             coffee: coffeeMock._id,
-          };
+          };1
 
           return superagent.post(apiUrl)
             .send(storeToPost)
